@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActiviy">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ChatX"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:id="@+id/H1"/>
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:hint=" Email\n Enter your Email"
+        android:layout_below="@+id/H1"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:id="@+id/emlField"
+        android:background="#D0BABA"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:hint=" Password\n Enter your Password"
+        android:layout_below="@+id/emlField"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:layout_margin="20dp"
+        android:id="@+id/pswField"
+        android:background="#D0BABA"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Forgot password?"
+        android:textSize="17dp"
+        android:textColor="#3D5AFE"
+        android:id="@+id/frgetBtn"
+        android:clickable="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/pswField"
+        android:layout_marginLeft="250dp"/>
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:text="Login"
+        android:id="@+id/lginBtn"
+        android:clickable="true"
+        android:layout_below="@+id/frgetBtn"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Don't have an account?"
+        android:textSize="16dp"
+        android:id="@+id/qstn"
+        android:layout_below="@+id/lginBtn"
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign-up"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        android:textColor="#3D5AFE"
+        android:id="@+id/sgnupBtn"
+        android:clickable="true"
+        android:layout_below="@+id/qstn"
+        android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>
