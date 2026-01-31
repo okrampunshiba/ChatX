@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         userList.setOnItemClickListener((parent,view,position,id)->{
-            Intent intent=new Intent(this,ChatActivity.class);
+            Intent intent=new Intent(this,ChatACtivity.class);
             intent.putExtra("uid",userIds.get(position));
             startActivity(intent);
         });
