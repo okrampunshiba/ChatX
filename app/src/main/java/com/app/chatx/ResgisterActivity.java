@@ -41,7 +41,7 @@ public class ResgisterActivity extends AppCompatActivity {
             String mail=email.getText().toString().trim();
             String pass=password.getText().toString().trim();
             if (mail.isEmpty()||pass.isEmpty()){
-                Toast.makeText(this, "Text Not Written!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid Information", Toast.LENGTH_SHORT).show();
             }
             auth.createUserWithEmailAndPassword(mail,pass)
                     .addOnSuccessListener(authResult -> {
