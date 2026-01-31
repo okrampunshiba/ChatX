@@ -28,7 +28,7 @@
         <Button
             android:layout_width="60dp"
             android:layout_height="50dp"
-            android:id="@+id/opnFilBtn"
+            android:id="@+id/attachBtn"
             android:text="+"
             android:textStyle="bold"
             android:textSize="16dp"/>
