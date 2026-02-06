@@ -2,6 +2,7 @@ package com.app.chatx;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
@@ -39,6 +41,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+        context = parent.getContext();
         View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message,parent,false);
         return new ViewHolder(view);
     }
@@ -52,16 +55,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
         LinearLayout layout=(LinearLayout) holder.itemView;
 
         if(msg.senderId.equals(currentUid)){
-            holder.msg.setBackgroundResource(R.drawable.sender_bubble);
+
             ((LinearLayout) holder.msg.getParent()) .setGravity(Gravity.END);
         }
         else{
-            holder.msg.setBackgroundResource(R.drawable.reciever_bubble);
+
             ((LinearLayout) holder.msg.getParent()).setGravity(Gravity.START);
         }
         if("text".equals(msg.type)){
             holder.msg.setVisibility(View.VISIBLE);
             holder.msg.setText(msg.message);
+            if (msg.senderId.equals(currentUid)) {
+                holder.msg.setBackgroundResource(R.drawable.sender_bubble);
+            } else {
+                holder.msg.setBackgroundResource(R.drawable.reciever_bubble);
+            }
         }
         else if("image".equals(msg.type)){
             holder.imageMessage.setVisibility(View.VISIBLE);
@@ -78,7 +86,26 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
             });
 
         }
+        else if("audio".equals(msg.type)){
+            holder.msg.setText("🎧 Voice Message(Tap to Play)");
+            holder.msg.setOnClickListener(v->{
+                playAudio(msg.audioUrl);
+            });
+        }
+
     }
+
+    private void playAudio(String audioUrl) {
+        try{
+            MediaPlayer player=new MediaPlayer();
+            player.setDataSource(audioUrl);
+            player.prepare();
+            player.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public int getItemCount(){
         return list.size();

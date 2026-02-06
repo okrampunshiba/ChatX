@@ -1,17 +1,23 @@
 package com.app.chatx;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,18 +30,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChatACtivity extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText messageBox;
-    Button sendBtn, attachBtn;
+    Button sendBtn, attachBtn,voiceBtn;
     ArrayList<Messages> messages;
     ChatAdapter adapter;
+    private static final int MEDIA_PERMISSION_CODE = 200;
     String chatId;
     FirebaseAuth auth;
     FirebaseDatabase database;
     String senderId, receiverId;
+    MediaRecorder recorder;
+    String audioPath;
+    boolean isRecording=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,7 @@ public class ChatACtivity extends AppCompatActivity {
         });
         recyclerView=findViewById(R.id.chatRecycler);
         messageBox=findViewById(R.id.messageBox);
+        voiceBtn=findViewById(R.id.vcBtn);
         sendBtn=findViewById(R.id.sendBtn);
         attachBtn=findViewById(R.id.attachBtn);
         database=FirebaseDatabase.getInstance();
@@ -66,6 +79,16 @@ public class ChatACtivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent,101);
         });
+        voiceBtn.setOnClickListener(v->{
+            if(!isRecording){
+                startRecording();
+                voiceBtn.setText("⏹️");
+            }
+            else{
+                stopRecording();
+                voiceBtn.setText("🎤");
+            }
+        });
 
         if(senderId.compareTo(receiverId)<0){
             chatId=senderId+"_"+receiverId;
@@ -74,7 +97,7 @@ public class ChatACtivity extends AppCompatActivity {
             chatId=receiverId+"_"+senderId;
         }
         sendBtn.setOnClickListener(v->{
-            Messages msg=new Messages(senderId,messageBox.getText().toString(),"","text");
+            Messages msg=new Messages(senderId,messageBox.getText().toString(),"","text","");
             database.getReference("Chats").child(chatId).push().setValue(msg);
             messageBox.setText("");
         });
@@ -96,11 +119,66 @@ public class ChatACtivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void stopRecording() {
+        try {
+            recorder.stop();
+            recorder.release();
+            recorder=null;
+            isRecording=false;
+            uploadAudioToFirebase(audioPath);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void uploadAudioToFirebase(String audioPath) {
+        Uri audioUri=Uri.fromFile(new File(audioPath));
+        StorageReference storageReference=FirebaseStorage.getInstance()
+                .getReference("VoiceMessage")
+                .child(System.currentTimeMillis()+".3gp");
+        storageReference.putFile(audioUri)
+                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl()
+                        .addOnSuccessListener(uri->{
+                            sendAudioMessage(uri.toString());
+                        }));
+    }
+
+    private void sendAudioMessage(String string) {
+        String senderId=FirebaseAuth.getInstance().getUid();
+        Messages msg=new Messages(senderId,"","","audio",string);
+        DatabaseReference ref=FirebaseDatabase.getInstance()
+                .getReference("Chats")
+                .child(chatId);
+        ref.push().setValue(msg);
+    }
+
+    private void startRecording() {
+        try{
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO},101);
+                return;
+            }
+            audioPath=getExternalCacheDir().getAbsolutePath()+"/voice_"+System.currentTimeMillis()+".3gp";
+            recorder=new MediaRecorder();
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            recorder.setOutputFile(audioPath);
+            recorder.prepare();
+            recorder.start();
+            isRecording=true;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==101 && requestCode==RESULT_OK && data !=null){
+        if(requestCode==101 && resultCode==RESULT_OK && data !=null){
             Uri fileUri=data.getData();
             String type=getContentResolver().getType(fileUri);
             if(type.startsWith("image")){
@@ -118,11 +196,21 @@ public class ChatACtivity extends AppCompatActivity {
         storageRef.putFile(fileUri).continueWithTask(task-> storageRef.getDownloadUrl())
                 .addOnSuccessListener(uri->{
                     Messages msg=new Messages(
-                            senderId,"",uri.toString(),mediaType
+                            senderId,"","",uri.toString(),mediaType
                     );
                     database.getReference("Chats")
                             .child(chatId).push().setValue(msg);
                 });
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] Permissions, @NonNull int[] grantResults){
+
+        super.onRequestPermissionsResult(requestCode, Permissions, grantResults);
+        if(requestCode==101 && grantResults.length>0&&grantResults[0]== PackageManager.PERMISSION_GRANTED){
+            startRecording();
+            voiceBtn.setText("⏹️");
+        }
+    }
+
 }

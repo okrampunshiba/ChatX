@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActiviy extends AppCompatActivity {
     EditText email, password;
-    TextView registerBtn;
+    TextView registerBtn, frgtPswdBtn;
     Button loginBtn;
     FirebaseAuth auth;
     @Override
@@ -29,6 +30,7 @@ public class LoginActiviy extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        frgtPswdBtn=findViewById(R.id.frgetBtn);
         email=findViewById(R.id.emlField);
         password=findViewById(R.id.pswField);
         loginBtn=findViewById(R.id.lginBtn);
@@ -39,6 +41,7 @@ public class LoginActiviy extends AppCompatActivity {
             finish();
             return;
         }
+
         loginBtn.setOnClickListener(v->{
             auth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
                     .addOnSuccessListener(authResult -> {
@@ -47,6 +50,23 @@ public class LoginActiviy extends AppCompatActivity {
         });
         registerBtn.setOnClickListener(v->{
             startActivity(new Intent(this,ResgisterActivity.class));
+        });
+        frgtPswdBtn.setOnClickListener(v -> {
+            String userEmail = email.getText().toString().trim();
+
+            if (userEmail.isEmpty()) {
+                email.setError("Enter your email first");
+                email.requestFocus();
+                return;
+            }
+
+            auth.sendPasswordResetEmail(userEmail)
+                    .addOnSuccessListener(unused -> {
+                        Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
         });
     }
 }

@@ -20,18 +20,25 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="horizontal">
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:id="@+id/attachBtn"
+                android:text="+"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
         <EditText
             android:layout_width="308dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/messageBox"/>
-        <Button
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:id="@+id/attachBtn"
-            android:text="+"
-            android:textStyle="bold"
-            android:textSize="16dp"/>
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="50dp"
+                android:id="@+id/vcBtn"
+                android:text="🎙️"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
             <Button
                 android:layout_width="80dp"
                 android:layout_height="50dp"
