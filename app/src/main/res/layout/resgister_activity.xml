@@ -7,7 +7,16 @@
     android:layout_height="match_parent"
     tools:context=".ResgisterActivity">
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⇐"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:layout_margin="20dp"
+        android:textColor="@color/black"
+        android:id="@+id/rgstrScrn_bckBtn"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,12 +28,22 @@
         android:layout_marginTop="100dp"
         android:id="@+id/H1"/>
 
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:hint=" Email\n Enter your Email"
+        android:hint=" Enter your Username"
         android:layout_below="@+id/H1"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/UsrnmField"
+        android:background="#D0BABA"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:hint=" Enter your Email"
+        android:layout_below="@+id/UsrnmField"
         android:layout_margin="20dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
@@ -34,7 +53,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:hint=" Password\n Enter your Password"
+        android:hint=" Enter your Password"
         android:layout_below="@+id/emlField"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"

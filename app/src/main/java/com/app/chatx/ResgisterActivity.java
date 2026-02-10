@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ResgisterActivity extends AppCompatActivity {
     EditText email, password;
+    TextView backBtn;
     Button registerBtn;
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -32,15 +34,24 @@ public class ResgisterActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        backBtn=findViewById(R.id.rgstrScrn_bckBtn);
+
         email=findViewById(R.id.emlField);
         password=findViewById(R.id.pswField);
+
         registerBtn=findViewById(R.id.rgstrBtn);
         auth=FirebaseAuth.getInstance();
         database=FirebaseDatabase.getInstance();
+        backBtn.setOnClickListener(v->{
+            startActivity(new Intent(this, LoginActiviy.class));
+        });
         registerBtn.setOnClickListener(v->{
+
+
             String mail=email.getText().toString().trim();
             String pass=password.getText().toString().trim();
-            if (mail.isEmpty()||pass.isEmpty()){
+
+            if (mail.isEmpty()||pass.isEmpty() ){
                 Toast.makeText(this, "Invalid Information", Toast.LENGTH_SHORT).show();
             }
             auth.createUserWithEmailAndPassword(mail,pass)

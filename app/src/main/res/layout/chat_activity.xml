@@ -8,13 +8,50 @@
     tools:context=".ChatACtivity">
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ‹ "
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:layout_marginLeft="4dp"
+            android:textColor="@color/black"
+            android:id="@+id/ChtScrn_bckBtn"/>
+        <TextView
+            android:layout_width="315dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="UserName"
+            android:textSize="25dp"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/UserName"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" ≡ "
+            android:textSize="35dp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:layout_margin="4dp"
+            android:textColor="@color/black"
+            android:id="@+id/menu"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="62dp"
         android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
             android:id="@+id/chatRecycler"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +82,7 @@
                 android:id="@+id/sendBtn"
                 android:text="▷"
                 android:textStyle="bold"
-                android:textSize="15dp"/>
+                android:textSize="15dp" />
 
     </LinearLayout>
     </LinearLayout>

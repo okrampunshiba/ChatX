@@ -87,7 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>{
 
         }
         else if("audio".equals(msg.type)){
-            holder.msg.setText("🎧 Voice Message(Tap to Play)");
+            holder.msg.setText("▶️ Voice Message");
             holder.msg.setOnClickListener(v->{
                 playAudio(msg.audioUrl);
             });

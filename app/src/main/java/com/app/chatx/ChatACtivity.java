@@ -7,8 +7,12 @@ import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,6 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChatACtivity extends AppCompatActivity {
+    TextView backBtn, usrNm;
     RecyclerView recyclerView;
     EditText messageBox;
     Button sendBtn, attachBtn,voiceBtn;
@@ -59,11 +64,16 @@ public class ChatACtivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         recyclerView=findViewById(R.id.chatRecycler);
         messageBox=findViewById(R.id.messageBox);
         voiceBtn=findViewById(R.id.vcBtn);
         sendBtn=findViewById(R.id.sendBtn);
         attachBtn=findViewById(R.id.attachBtn);
+        backBtn=findViewById(R.id.ChtScrn_bckBtn);
+        backBtn.setOnClickListener(v->{
+            startActivity(new Intent(this, MainActivity.class));
+        });
         database=FirebaseDatabase.getInstance();
         auth=FirebaseAuth.getInstance();
         senderId=auth.getUid();
@@ -79,14 +89,15 @@ public class ChatACtivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(intent,101);
         });
+
         voiceBtn.setOnClickListener(v->{
             if(!isRecording){
                 startRecording();
-                voiceBtn.setText("⏹️");
+                voiceBtn.setText("⏺️");
             }
             else{
                 stopRecording();
-                voiceBtn.setText("🎤");
+                voiceBtn.setText("🎙️");
             }
         });
 
@@ -209,7 +220,7 @@ public class ChatACtivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, Permissions, grantResults);
         if(requestCode==101 && grantResults.length>0&&grantResults[0]== PackageManager.PERMISSION_GRANTED){
             startRecording();
-            voiceBtn.setText("⏹️");
+            voiceBtn.setText("⏺️");
         }
     }
 
