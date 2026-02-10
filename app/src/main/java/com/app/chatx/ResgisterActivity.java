@@ -17,7 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class ResgisterActivity extends AppCompatActivity {
-    EditText email, password;
+    EditText email, password, usrNm;
     TextView backBtn;
     Button registerBtn;
     FirebaseAuth auth;
@@ -36,6 +36,7 @@ public class ResgisterActivity extends AppCompatActivity {
         });
         backBtn=findViewById(R.id.rgstrScrn_bckBtn);
 
+        usrNm=findViewById(R.id.UsrnmField);
         email=findViewById(R.id.emlField);
         password=findViewById(R.id.pswField);
 
@@ -47,17 +48,17 @@ public class ResgisterActivity extends AppCompatActivity {
         });
         registerBtn.setOnClickListener(v->{
 
-
+            String usrnm=usrNm.getText().toString().trim();
             String mail=email.getText().toString().trim();
             String pass=password.getText().toString().trim();
 
-            if (mail.isEmpty()||pass.isEmpty() ){
+            if (mail.isEmpty()|| usrnm.isEmpty()||pass.isEmpty() ){
                 Toast.makeText(this, "Invalid Information", Toast.LENGTH_SHORT).show();
             }
             auth.createUserWithEmailAndPassword(mail,pass)
                     .addOnSuccessListener(authResult -> {
                         String uid=auth.getUid();
-                        User user=new User(uid,mail);
+                        User user=new User(uid,mail,usrnm);
                         database.getReference("Users").child(uid).setValue(user)
                                         .addOnSuccessListener(unused->{
                                             startActivity(new Intent(ResgisterActivity.this, MainActivity.class));

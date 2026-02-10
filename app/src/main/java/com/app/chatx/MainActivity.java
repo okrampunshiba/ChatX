@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot data:snapshot.getChildren()){
                     User user=data.getValue(User.class);
                     if(!user.uid.equals((auth.getUid()))){
-                        users.add(user.email);
+                        users.add(user.username);
                         userIds.add(user.uid);
                     }
                 }
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         userList.setOnItemClickListener((parent,view,position,id)->{
             Intent intent=new Intent(this,ChatACtivity.class);
             intent.putExtra("uid",userIds.get(position));
+            intent.putExtra("username",users.get(position));
             startActivity(intent);
         });
         logout.setOnClickListener(v->{

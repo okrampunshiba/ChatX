@@ -27,7 +27,7 @@
             android:text="UserName"
             android:textSize="25dp"
             android:layout_marginLeft="5dp"
-            android:id="@+id/UserName"
+            android:id="@+id/chatUserName"
             />
         <TextView
             android:layout_width="wrap_content"

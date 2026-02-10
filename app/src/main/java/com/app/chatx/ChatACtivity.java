@@ -39,7 +39,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChatACtivity extends AppCompatActivity {
-    TextView backBtn, usrNm;
+    TextView backBtn, chatUserName;
     RecyclerView recyclerView;
     EditText messageBox;
     Button sendBtn, attachBtn,voiceBtn;
@@ -64,7 +64,7 @@ public class ChatACtivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        chatUserName=findViewById(R.id.chatUserName);
         recyclerView=findViewById(R.id.chatRecycler);
         messageBox=findViewById(R.id.messageBox);
         voiceBtn=findViewById(R.id.vcBtn);
@@ -74,6 +74,8 @@ public class ChatACtivity extends AppCompatActivity {
         backBtn.setOnClickListener(v->{
             startActivity(new Intent(this, MainActivity.class));
         });
+        String receiverEmail=getIntent().getStringExtra( "username");
+        chatUserName.setText(receiverEmail);
         database=FirebaseDatabase.getInstance();
         auth=FirebaseAuth.getInstance();
         senderId=auth.getUid();
